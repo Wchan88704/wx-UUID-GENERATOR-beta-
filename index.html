@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UUID Generator</title>
+  <style id="theme-style">
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #000;
+      color: #ff3c3c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #1a0000;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff0000aa;
+      text-align: center;
+      border: 2px solid #ff3c3c;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      text-shadow: 0 0 10px #ff0000;
+    }
+
+    #uuid {
+      font-size: 1.3em;
+      word-break: break-word;
+      margin: 20px 0;
+      min-height: 1.4em;
+      color: #ffb3b3;
+      text-shadow: 0 0 5px #ff0000;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #8b0000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    button:hover {
+      background-color: #b30000;
+      box-shadow: 0 0 10px #ff0000;
+    }
+
+    select {
+      margin: 5px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      background: #1a0000;
+      color: #ffb3b3;
+      font-family: monospace;
+    }
+
+    small {
+      display: block;
+      margin-top: 15px;
+      color: #ff6666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">UUID Generator</h1>
+    <div id="uuid">Klik tombol... jika kau berani</div>
+    <div class="button-group">
+      <button id="generate-btn" onclick="generateUUID()">Buat UUID</button>
+      <button id="copy-btn" onclick="copyUUID()">Salin UUID</button>
+    </div>
+    <div class="button-group">
+      <select onchange="changeTheme(this.value)">
+        <option value="dark" id="modeSeramOption">Mode Seram</option>
+      </select>
+      <select onchange="changeLanguage(this.value)">
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="en">🇺🇸 English</option>
+        <option value="jp">🇯🇵 日本語</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="kr">🇰🇷 한국어</option>
+        <option value="cn">🇨🇳 中文</option>
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="es">🇲🇽 Español</option>
+        <option value="sa">🇸🇦 العربية</option>
+        <option value="tr">🇹🇷 Türkçe</option>
+        <option value="vn">🇻🇳 Tiếng Việt</option>
+        <option value="my">🇲🇾 Bahasa Melayu</option>
+        <option value="nl">🇳🇱 Nederlands</option>
+        <option value="ba">🇧🇦 Bosanski</option>
+        <option value="in">🇮🇳 हिंदी</option>
+        <option value="ge">🇬🇪 ქართული</option>
+        <option value="bg">🇧🇬 Български</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="pl">🇵🇱 Polski</option>
+        <option value="no">🇳🇴 Norsk</option>
+      </select>
+    </div>
+    <small id="footer">Disentuh oleh kegelapan — WX</small>
+  </div>
+
+  <script>
+    const texts = {
+      id: {
+        title: "UUID Generator",
+        subtitle: "Klik tombol... jika kau berani",
+        generate: "Buat UUID",
+        copy: "Salin UUID",
+        footer: "Disentuh oleh kegelapan — WX",
+        modeSeram: "Mode Seram"
+      },
+      en: {
+        title: "UUID Generator",
+        subtitle: "Click the button... if you dare",
+        generate: "Generate UUID",
+        copy: "Copy UUID",
+        footer: "Touched by darkness — WX",
+        modeSeram: "Dark Mode"
+      },
+      jp: {
+        title: "UUIDジェネレーター",
+        subtitle: "ボタンをクリックして…勇気があるなら",
+        generate: "UUID生成",
+        copy: "UUIDをコピー",
+        footer: "闇に触れられた — WX",
+        modeSeram: "ダークモード"
+      },
+      de: {
+        title: "UUID-Generator",
+        subtitle: "Klick den Knopf... wenn du dich traust",
+        generate: "UUID generieren",
+        copy: "UUID kopieren",
+        footer: "Von Dunkelheit berührt — WX",
+        modeSeram: "Dunkelmodus"
+      },
+      kr: {
+        title: "UUID 생성기",
+        subtitle: "버튼을 클릭하세요... 용기 있다면",
+        generate: "UUID 생성",
+        copy: "UUID 복사",
+        footer: "어둠에 닿았다 — WX",
+        modeSeram: "다크 모드"
+      },
+      cn: {
+        title: "UUID生成器",
+        subtitle: "点击按钮……如果你敢的话",
+        generate: "生成UUID",
+        copy: "复制UUID",
+        footer: "被黑暗触碰 — WX",
+        modeSeram: "黑暗模式"
+      },
+      it: {
+        title: "Generatore di UUID",
+        subtitle: "Clicca il bottone... se hai coraggio",
+        generate: "Genera UUID",
+        copy: "Copia UUID",
+        footer: "Toccato dall'oscurità — WX",
+        modeSeram: "Modalità Scura"
+      },
+      es: {
+        title: "Generador de UUID",
+        subtitle: "Haz clic... si te atreves",
+        generate: "Generar UUID",
+        copy: "Copiar UUID",
+        footer: "Tocado por la oscuridad — WX",
+        modeSeram: "Modo Oscuro"
+      },
+      sa: {
+        title: "مولد UUID",
+        subtitle: "اضغط على الزر... إذا كنت تجرؤ",
+        generate: "توليد UUID",
+        copy: "نسخ UUID",
+        footer: "لمسته الظلام — WX",
+        modeSeram: "الوضع المظلم"
+      },
+      tr: {
+        title: "UUID Oluşturucu",
+        subtitle: "Düğmeye tıkla... eğer cesaretin varsa",
+        generate: "UUID Oluştur",
+        copy: "UUID Kopyala",
+        footer: "Karanlığa dokundu — WX",
+        modeSeram: "Karanlık Mod"
+      },
+      vn: {
+        title: "Trình tạo UUID",
+        subtitle: "Nhấn nút... nếu bạn dám",
+        generate: "Tạo UUID",
+        copy: "Sao chép UUID",
+        footer: "Chạm vào bóng tối — WX",
+        modeSeram: "Chế độ tối"
+      },
+      my: {
+        title: "Penjana UUID",
+        subtitle: "Klik butang... jika anda berani",
+        generate: "Jana UUID",
+        copy: "Salin UUID",
+        footer: "Tersentuh oleh kegelapan — WX",
+        modeSeram: "Mod Gelap"
+      },
+      nl: {
+        title: "UUID Generator",
+        subtitle: "Klik op de knop... als je durft",
+        generate: "Genereer UUID",
+        copy: "Kopieer UUID",
+        footer: "Geraakt door duisternis — WX",
+        modeSeram: "Donkere modus"
+      },
+      ba: {
+        title: "UUID Generator",
+        subtitle: "Klikni dugme... ako se usudiš",
+        generate: "Generiši UUID",
+        copy: "Kopiraj UUID",
+        footer: "Dotakla ga je tama — WX",
+        modeSeram: "Tamni način"
+      },
+      in: {
+        title: "UUID जनरेटर",
+        subtitle: "बटन पर क्लिक करें... अगर आप हिम्मत रखते हैं",
+        generate: "UUID जनरेट करें",
+        copy: "UUID कॉपी करें",
+        footer: "अंधकार द्वारा स्पर्श — WX",
+        modeSeram: "डार्क मोड"
+      },
+      ge: {
+        title: "UUID გენერატორი",
+        subtitle: "დააჭირე ღილაკს... თუ გაბედავ",
+        generate: "UUID გენერაცია",
+        copy: "UUID კოპირება",
+        footer: "ბნელის შეხება — WX",
+        modeSeram: "ბნელი რეჟიმი"
+      },
+      bg: {
+        title: "UUID генератор",
+        subtitle: "Кликни бутона... ако смееш",
+        generate: "Генерирай UUID",
+        copy: "Копирай UUID",
+        footer: "Докоснат от мрака — WX",
+        modeSeram: "Тъмен режим"
+      },
+      ru: {
+        title: "Генератор UUID",
+        subtitle: "Нажми кнопку... если осмелишься",
+        generate: "Создать UUID",
+        copy: "Скопировать UUID",
+        footer: "Прикоснулся к тьме — WX",
+        modeSeram: "Темная тема"
+      },
+      pl: {
+        title: "Generator UUID",
+        subtitle: "Kliknij przycisk... jeśli się odważysz",
+        generate: "Generuj UUID",
+        copy: "Kopiuj UUID",
+        footer: "Dotknięty przez ciemność — WX",
+        modeSeram: "Tryb ciemny"
+      },
+      no: {
+        title: "UUID Generator",
+        subtitle: "Klikk knappen... om du tør",
+        generate: "Generer UUID",
+        copy: "Kopier UUID",
+        footer: "Berørt av mørket — WX",
+        modeSeram: "Mørk modus"
+      }
+    };
+
+    function typeText(text, elementId, delay = 50) {
+      const element = document.getElementById(elementId);
+      element.textContent = '';
+      let i = 0;
+      const typing = setInterval(() => {
+        element.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) clearInterval(typing);
+      }, delay);
+    }
+
+    function generateUUID() {
+      const uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+      typeText(uuid, 'uuid', 150);
+    }
+
+    function copyUUID() {
+      const text = document.getElementById("uuid").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("UUID copied to clipboard!");
+      }, () => {
+        alert("Failed to copy UUID.");
+      });
+    }
+
+    function changeTheme(mode) {
+      const style = document.getElementById("theme-style");
+      if (mode === "dark") {
+        style.textContent = `body {font-family: 'Courier New', Courier, monospace; background: #000; color: #ff3c3c;} .container {background: #1a0000; border: 2px solid #ff3c3c;}`;
+      }
+    }
+
+    function changeLanguage(lang) {
+      document.getElementById("title").textContent = texts[lang].title;
+      document.getElementById("uuid").textContent = texts[lang].subtitle;
+      document.getElementById("generate-btn").textContent = texts[lang].generate;
+      document.getElementById("copy-btn").textContent = texts[lang].copy;
+      document.getElementById("footer").textContent = texts[lang].footer;
+      document.getElementById("modeSeramOption").textContent = texts[lang].modeSeram;
+    }
+  </script>
+</body>
+</html>
